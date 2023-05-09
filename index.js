@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 4000;
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 //jubairofficial97
 //ZvZBFFW29m8myQOh
 
@@ -42,9 +42,12 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/users/:id", (req, res) => {
+    app.delete("/users/:id", async (req, res) => {
       const getId = req.params.id;
-      console.log("Please Request from id", getId);
+      console.log("Please Request from DB", getId);
+      const query = { _id: new ObjectId(getId) };
+      const result = await collectionData.deleteOne(query);
+      res.send(result);
     });
     await client.db("admin").command({ ping: 1 });
     console.log(
